@@ -6,9 +6,19 @@ const { shuffleArray } = require("./utils");
 
 app.use(express.json());
 
-app.use("/js", express.static(path.join(__dirname, "/public/index.js")));
-app.use("/styles", express.static(path.join(__dirname, "/public/index.css")));
-app.use("/", express.static(path.join(__dirname, "/public/index.html")));
+app.use("/public", express.static(path.join(__dirname, "../Public/")));
+
+app.get("/", function (req, res) {
+  res.sendFile(path.join(__dirname, "./public/index.html"));
+});
+
+app.get("/js", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.js"));
+});
+
+app.get("/styles", (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/index.css"));
+});
 app.get("/api/robots", (req, res) => {
   try {
     res.status(200).send(botsArr);
