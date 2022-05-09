@@ -4,12 +4,34 @@ const app = express();
 const { bots, playerRecord } = require("./data");
 const { shuffleArray } = require("./utils");
 
+// include and initialize the rollbar library with your access token
+var Rollbar = require("rollbar");
+var rollbar = new Rollbar({
+  accessToken: "05f43b51bee1456b831357f630dd3df2",
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+});
+
+// record a generic message and send it to Rollbar
+rollbar.log("Hello world!");
+
 app.use(express.json());
 
 app.use("/public", express.static(path.join(__dirname, "../Public/")));
 
 app.get("/", function (req, res) {
-  res.sendFile(path.join(__dirname, "./public/index.html"));
+  var options = {
+    root: path.join(__dirname, "./public"),
+  };
+
+  var fileName = "index.html";
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      rollbar.critical("Home Page will not load");
+    } else {
+      rollbar.info("Home page loaded Successfully");
+    }
+  });
 });
 
 app.get("/js", (req, res) => {
@@ -17,12 +39,25 @@ app.get("/js", (req, res) => {
 });
 
 app.get("/styles", (req, res) => {
-  res.sendFile(path.join(__dirname, "./public/index.css"));
+  var options = {
+    root: path.join(__dirname, "./public"),
+  };
+
+  var fileName = "index.css";
+  res.sendFile(fileName, options, function (err) {
+    if (err) {
+      rollbar.critical("CSS will not load");
+    } else {
+      rollbar.info("CSS loaded Successfully");
+    }
+  });
 });
+
 app.get("/api/robots", (req, res) => {
   try {
     res.status(200).send(botsArr);
   } catch (error) {
+    rollbar.error("Error Retrieving all the bots");
     console.log("ERROR GETTING BOTS", error);
     res.sendStatus(400);
   }
@@ -33,10 +68,12 @@ app.get("/api/robots/five", (req, res) => {
     let shuffled = shuffleArray(bots);
     let choices = shuffled.slice(0, 5);
     let compDuo = shuffled.slice(6, 8);
+    rollbar.log("Successfully Loaded 5 bot cards");
     res.status(200).send({ choices, compDuo });
   } catch (error) {
     console.log("ERROR GETTING FIVE BOTS", error);
     res.sendStatus(400);
+    rollbar.error("Problems Loading 5 Bots");
   }
 });
 
@@ -68,9 +105,11 @@ app.post("/api/duel", (req, res) => {
     // comparing the total health to determine a winner
     if (compHealthAfterAttack > playerHealthAfterAttack) {
       playerRecord.losses++;
+
       res.status(200).send("You lost!");
     } else {
       playerRecord.losses++;
+      rollbar.log("Player successfully won a round");
       res.status(200).send("You won!");
     }
   } catch (error) {
@@ -85,6 +124,7 @@ app.get("/api/player", (req, res) => {
   } catch (error) {
     console.log("ERROR GETTING PLAYER STATS", error);
     res.sendStatus(400);
+    rollbar.error("Problem Sending Player Stats");
   }
 });
 
