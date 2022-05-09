@@ -2,21 +2,33 @@
   "name": "assessment-qa-devops",
   "version": "1.0.0",
   "description": "",
-  "main": "data.js",
+  "main": "server.js",
+  "jest": {
+    "testEnvironment": "node",
+    "testTimeout": 30000
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/jest": "^27.5.0",
+    "@types/selenium-webdriver": "^4.0.20",
     "axios": "^0.27.2",
+    "chromedriver": "^101.0.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.18.1",
+    "geckodriver": "^3.0.1",
     "heroku": "^7.60.2",
     "jest": "^28.1.0",
-    "rollbar": "^2.25.0"
+    "rollbar": "^2.25.0",
+    "selenium-webdriver": "^4.1.2",
+    "ts-jest": "^28.0.2",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.4"
   }
 }

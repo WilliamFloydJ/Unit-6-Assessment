@@ -1,0 +1,10 @@
+﻿When you click draw does that consistently draw 5 cards. 
+Click on the draw button, do this several times and with different conditions, such as different bots. Every time there should be 5 bot cards drawn for the user.
+
+
+When you win does it display it in the correct locations?
+        After winning a round, check if the scoreboard is accurate. The score should be right in the fact that if you won a game that the wins go up. What actually happens is that no matter if you win or lose the losses go up. Environment, windows 10, Google Chrome 101
+
+
+When you click show all bots does it really show all the bots?
+        When you navigate to the home page, and click on the show all bots button, does that indeed show all the bots? The bots should be displayed on the screen. What actually happens is that nothing is shown and in the console an error appears. Environment, windows 10, Google Chrome 101
